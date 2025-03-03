@@ -1,0 +1,81 @@
+<!-- login.html -->
+{% extends 'base.html' %} {% block title %}Login - BrightHaven{% endblock %} {% block content %}
+<!-- Fullscreen Logo Loader -->
+<div id="logo-loader" class="d-flex justify-content-center align-items-center position-fixed top-0 start-0 w-100 h-100 bg-white">
+    <img src="{{ url_for('static', filename='images/pr1.png') }}" alt="Logo" class="img-fluid">
+</div>
+<section id="login" class="container d-flex justify-content-center align-items-center min-vh-100 fade-in">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="text-center mb-4">
+                <img src="{{ url_for('static', filename='images/pr1.png') }}" alt="Logo" class="img-fluid logo img-hover">
+            </div>
+            <h3 class="text-center mb-4"><b>Login</b></h3>
+
+            {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %} {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %} {% endif %} {% endwith %}
+
+            <form method="POST" action="{{ url_for('home.login') }}" onsubmit="return validateForm()">
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" class="form-control" id="username" name="username" required autofocus>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Login</button>
+            </form>
+            <div class="text-center mt-3">
+                <a href="{{ url_for('home.forgot_password') }}" class="text-decoration-none">Forgot Password?</a>
+            </div>
+            <div class="text-center mt-2">
+                <a href="{{ url_for('home.signup') }}" class="text-decoration-none">Create New User</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    function validateForm() {
+        let isValid = true;
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value.trim();
+
+        if (username === '') {
+            isValid = false;
+            alert('Username is required');
+        }
+        if (password === '') {
+            isValid = false;
+            alert('Password is required');
+        }
+
+        return isValid;
+    }
+</script>
+<script>
+    window.addEventListener('load', function() {
+        setTimeout(function() {
+            document.getElementById('logo-loader').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }, 3000); // 3 seconds delay
+    });
+</script>
+
+<!-- Add this before closing body tag -->
+<script>
+    // Initialize loader state
+    if (typeof sessionStorage !== 'undefined') {
+        if (!sessionStorage.getItem('firstLoadDone')) {
+            document.getElementById('startupLoader').style.display = 'flex';
+        } else {
+            document.getElementById('startupLoader').style.display = 'none';
+        }
+    }
+</script>
+{% endblock %}

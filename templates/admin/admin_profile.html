@@ -1,0 +1,48 @@
+{% extends 'admin/admin_base.html' %}
+{% block title %}Admin Profile{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Admin Profile</h1>
+    {% if admin %}
+    <p><strong>Name:</strong> {{ admin.full_name }}</p>
+    <p><strong>Email:</strong> {{ admin.email }}</p>
+    <p><strong>Username:</strong> {{ admin.username }}</p>
+
+    <button id="editProfileBtn" class="btn btn-primary">Edit Profile</button>
+    <button id="deleteProfileBtn" class="btn btn-danger">Delete Profile</button>
+
+    <form id="editProfileForm" style="display: none;" method="POST" action="{{ url_for('admin.update_profile') }}">
+        <div class="mb-3">
+            <label for="fullName" class="form-label">Full Name</label>
+            <input type="text" id="fullName" name="full_name" class="form-control" value="{{ admin.full_name }}">
+        </div>
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" id="email" name="email" class="form-control" value="{{ admin.email }}">
+        </div>
+        <button type="submit" class="btn btn-success">Save Changes</button>
+    </form>
+    {% else %}
+    <p>Admin profile not found.</p>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Toggle the edit profile form when clicking the Edit Profile button
+    document.getElementById("editProfileBtn").addEventListener("click", function() {
+        var form = document.getElementById("editProfileForm");
+        form.style.display = (form.style.display === "none") ? "block" : "none";
+    });
+
+    // Confirm deletion before proceeding
+    document.getElementById("deleteProfileBtn").addEventListener("click", function() {
+        if (confirm("Are you sure you want to delete your profile? This action cannot be undone.")) {
+            // Redirect to the delete profile route (or perform an AJAX request)
+            window.location.href = "{{ url_for('admin.delete_profile') }}";
+        }
+    });
+</script>
+{% endblock %}

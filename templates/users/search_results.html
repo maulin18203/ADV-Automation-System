@@ -1,0 +1,15 @@
+{% extends 'users/user_base.html' %} {% block title %}Search Results{% endblock %} {% block content %}
+<div class="container mt-4">
+    <h1>Search Results</h1>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Results for: {{ query }}</h5>
+                    <!-- Add search results content here -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

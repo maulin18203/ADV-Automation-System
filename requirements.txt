@@ -1,0 +1,9 @@
+Flask
+Flask-MySQL
+Flask-SQLAlchemy
+Flask-WTF
+pymysql
+gunicorn
+requests
+RPi.GPIO
+flask-cors

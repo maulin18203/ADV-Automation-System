@@ -1,0 +1,111 @@
+{% extends 'admin/admin_base.html' %}
+{% block title %}Real-Time Monitoring{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Real-Time System Monitoring</h1>
+    
+    <!-- System Status Card -->
+    <div class="row mb-4">
+        <div class="col-lg-12">
+            <div class="card shadow mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">System Status</h5>
+                    <div id="systemStatus">
+                        <p><strong>CPU Usage:</strong> <span id="cpuUsage">Loading...</span>%</p>
+                        <p><strong>Memory Usage:</strong> <span id="memoryUsage">Loading...</span>%</p>
+                        <p><strong>Disk Usage:</strong> <span id="diskUsage">Loading...</span>%</p>
+                        <p><strong>Temperature:</strong> <span id="temperature">Loading...</span>°C</p>
+                        <p><strong>Network:</strong> <span id="networkStatus">Loading...</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- CPU Usage Chart -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="card-title">CPU Usage Over Time</h5>
+                    <canvas id="cpuChart" style="height: 300px;"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- Include Chart.js from CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+// Function to simulate fetching real-time monitoring data
+function fetchMonitoringData() {
+    // Replace the following simulated values with your real monitoring API data
+    const data = {
+        cpu: Math.floor(Math.random() * 100),
+        memory: Math.floor(Math.random() * 100),
+        disk: Math.floor(Math.random() * 100),
+        temperature: (Math.random() * 40).toFixed(1),
+        network: Math.random() > 0.5 ? 'Online' : 'Offline'
+    };
+    
+    document.getElementById('cpuUsage').textContent = data.cpu;
+    document.getElementById('memoryUsage').textContent = data.memory;
+    document.getElementById('diskUsage').textContent = data.disk;
+    document.getElementById('temperature').textContent = data.temperature;
+    document.getElementById('networkStatus').textContent = data.network;
+    
+    updateCpuChart(data.cpu);
+}
+
+// Set up the CPU usage chart using Chart.js
+var cpuChartCtx = document.getElementById('cpuChart').getContext('2d');
+var cpuChart = new Chart(cpuChartCtx, {
+    type: 'line',
+    data: {
+        labels: [], // Time labels will be added dynamically
+        datasets: [{
+            label: 'CPU Usage (%)',
+            data: [],
+            backgroundColor: 'rgba(75,192,192,0.2)',
+            borderColor: 'rgba(75,192,192,1)',
+            borderWidth: 1,
+            tension: 0.1
+        }]
+    },
+    options: {
+        scales: {
+            x: {
+                title: { display: true, text: 'Time' }
+            },
+            y: {
+                beginAtZero: true,
+                title: { display: true, text: 'CPU Usage (%)' }
+            }
+        }
+    }
+});
+
+// Update the CPU chart with the new data point
+function updateCpuChart(cpuUsage) {
+    var currentTime = new Date().toLocaleTimeString();
+    cpuChart.data.labels.push(currentTime);
+    cpuChart.data.datasets[0].data.push(cpuUsage);
+    
+    // Limit the chart to the last 10 data points
+    if(cpuChart.data.labels.length > 10) {
+        cpuChart.data.labels.shift();
+        cpuChart.data.datasets[0].data.shift();
+    }
+    cpuChart.update();
+}
+
+// Fetch monitoring data every 5 seconds
+setInterval(fetchMonitoringData, 5000);
+// Initial fetch
+fetchMonitoringData();
+</script>
+{% endblock %}

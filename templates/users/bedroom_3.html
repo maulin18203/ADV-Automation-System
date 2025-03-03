@@ -1,0 +1,93 @@
+{% extends 'users/user_base.html' %}
+
+{% block title %}Bedroom 3 Control{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center">Bedroom 3 Control Panel</h2>
+    <div class="row">
+        {% for device, label in {
+            'bedroom3_light': 'Light',
+            'bedroom3_fan': 'Fan',
+            'bedroom3_ac': 'Air Conditioner',
+            'bedroom3_tv': 'TV',
+            'bedroom3_geyser': 'Water Geyser'
+        }.items() %}
+        <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">{{ label }}</h5>
+                    <p>Status: <span id="{{ device }}_status" class="fw-bold text-secondary">Loading...</span></p>
+                    <button class="btn btn-success mb-2" onclick="toggleDevice('{{ device }}', 'on')">Turn On</button>
+                    <button class="btn btn-danger" onclick="toggleDevice('{{ device }}', 'off')">Turn Off</button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Master Control (Turn All Devices On/Off) -->
+    <div class="row mt-4">
+        <div class="col-12 text-center">
+            <button class="btn btn-primary me-2" onclick="toggleAllDevices('on')">Turn All On</button>
+            <button class="btn btn-secondary" onclick="toggleAllDevices('off')">Turn All Off</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Fetch and update the status of each device
+    function updateDeviceStatus() {
+        const devices = [
+            'bedroom3_light',
+            'bedroom3_fan',
+            'bedroom3_ac',
+            'bedroom3_tv',
+            'bedroom3_geyser'
+        ];
+
+        devices.forEach(device => {
+            fetch(`/get-device-status/${device}`)
+                .then(response => response.json())
+                .then(data => {
+                    const statusElement = document.getElementById(device + "_status");
+                    if (data.status === "on") {
+                        statusElement.textContent = "ON";
+                        statusElement.classList.remove("text-secondary", "text-danger");
+                        statusElement.classList.add("text-success");
+                    } else {
+                        statusElement.textContent = "OFF";
+                        statusElement.classList.remove("text-secondary", "text-success");
+                        statusElement.classList.add("text-danger");
+                    }
+                })
+                .catch(error => console.error('Error fetching status:', error));
+        });
+    }
+
+    // Toggle an individual device's state (ON/OFF)
+    function toggleDevice(device, state) {
+        fetch(`/toggle-device/${device}/${state}`)
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                updateDeviceStatus(); // Refresh status after toggling
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    // Toggle all devices' state (ON/OFF)
+    function toggleAllDevices(state) {
+        fetch(`/toggle-all/${state}`)
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                updateDeviceStatus(); // Refresh all statuses
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    // Load device status when the page loads
+    window.onload = updateDeviceStatus;
+</script>
+{% endblock %}

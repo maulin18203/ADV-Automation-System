@@ -1,0 +1,112 @@
+{% extends 'users/user_base.html' %} 
+
+{% block title %}Main Room{% endblock %} 
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center">Control Devices</h1>
+    <div class="row">
+        <!-- Fan Control -->
+        <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Fan (Pin D1)</h5>
+                    <p>Status: <span id="pin_D1_status" class="fw-bold text-secondary">Loading...</span></p>
+                    <button class="btn btn-success mb-2" onclick="toggleDevice('D1', 'on')">Turn On</button>
+                    <button class="btn btn-danger" onclick="toggleDevice('D1', 'off')">Turn Off</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Light Control -->
+        <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Light (Pin D2)</h5>
+                    <p>Status: <span id="pin_D2_status" class="fw-bold text-secondary">Loading...</span></p>
+                    <button class="btn btn-success mb-2" onclick="toggleDevice('D2', 'on')">Turn On</button>
+                    <button class="btn btn-danger" onclick="toggleDevice('D2', 'off')">Turn Off</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- TV Control -->
+        <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">TV (Pin D5)</h5>
+                    <p>Status: <span id="pin_D5_status" class="fw-bold text-secondary">Loading...</span></p>
+                    <button class="btn btn-success mb-2" onclick="toggleDevice('D5', 'on')">Turn On</button>
+                    <button class="btn btn-danger" onclick="toggleDevice('D5', 'off')">Turn Off</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- WiFi Control -->
+        <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">WiFi (Pin D6)</h5>
+                    <p>Status: <span id="pin_D6_status" class="fw-bold text-secondary">Loading...</span></p>
+                    <button class="btn btn-success mb-2" onclick="toggleDevice('D6', 'on')">Turn On</button>
+                    <button class="btn btn-danger" onclick="toggleDevice('D6', 'off')">Turn Off</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-4">
+        <button class="btn btn-primary me-2" onclick="toggleAllDevices('on')">Turn All On</button>
+        <button class="btn btn-secondary" onclick="toggleAllDevices('off')">Turn All Off</button>
+    </div>
+</div>
+
+<script>
+    // Function to update device status on the page
+    function updateDeviceStatus() {
+        fetch(`/esp/status`)
+            .then(response => response.json())
+            .then(data => {
+                Object.keys(data).forEach(pin => {
+                    const statusElement = document.getElementById(`pin_${pin}_status`);
+                    if (data[pin] === "on") {
+                        statusElement.textContent = "ON";
+                        statusElement.classList.remove("text-secondary", "text-danger");
+                        statusElement.classList.add("text-success");
+                    } else {
+                        statusElement.textContent = "OFF";
+                        statusElement.classList.remove("text-secondary", "text-success");
+                        statusElement.classList.add("text-danger");
+                    }
+                });
+            })
+            .catch(error => console.error('Error fetching device status:', error));
+    }
+
+    // Function to toggle a device on/off
+    function toggleDevice(pin, state) {
+        fetch(`/esp-toggle-device?pin=${pin}&state=${state}`)
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                updateDeviceStatus();
+            })
+            .catch(error => alert('Failed to toggle device'));
+    }
+
+    // Function to toggle all devices at once
+    function toggleAllDevices(state) {
+        fetch(`/esp-toggle-all-devices?state=${state}`)
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                updateDeviceStatus();
+            })
+            .catch(error => alert('Failed to toggle all devices'));
+    }
+
+    // Update the status when the page loads
+    document.addEventListener('DOMContentLoaded', updateDeviceStatus);
+</script>
+
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends 'admin/admin_base.html' %}
+{% block title %}Notifications{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Notifications</h1>
+    <p>This is the notifications page for admins.</p>
+    <!-- Display contact requests -->
+    <h2>Contact Us Requests</h2>
+    <div class="card shadow">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Message</th>
+                            <th>Timestamp</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for request in contact_requests %}
+                        <tr>
+                            <td>{{ request.id }}</td>
+                            <td>{{ request.username }}</td>
+                            <td>{{ request.email }}</td>
+                            <td>{{ request.message }}</td>
+                            <td>{{ request.timestamp }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Example code to handle notifications
+    const notifications = document.querySelectorAll('.notification');
+    notifications.forEach(notification => {
+        notification.addEventListener('click', () => {
+            // Mark notification as read
+            notification.classList.add('read');
+        });
+    });
+    // End of example code
+</script>
+{% endblock %}

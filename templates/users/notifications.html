@@ -1,0 +1,62 @@
+{% extends "users/user_base.html" %} 
+
+{% block title %}Notifications{% endblock %} 
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="text-center">Notifications</h1>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Recent Notifications</h5>
+                    <div class="notification-list">
+                        <!-- Notifications will be populated here -->
+                        {% if notifications %}
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Notification</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for notification in notifications %}
+                                <tr>
+                                    <td>{{ notification.timestamp }}</td>
+                                    <td>{{ notification.message }}</td>
+                                    <td>
+                                        <button class="btn btn-primary btn-sm" onclick="handleNotificationAction('{{ notification.id }}')">View</button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        {% else %}
+                        <div class="alert alert-info">
+                            No new notifications
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function handleNotificationAction(notificationId) {
+        fetch(`/get-notification/${notificationId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    alert(`Date: ${data.date}\nMessage: ${data.message}`);
+                }
+            })
+            .catch(error => console.error('Error fetching notification:', error));
+    }
+</script>
+{% endblock %}

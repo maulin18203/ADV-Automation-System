@@ -1,0 +1,193 @@
+{% extends 'admin/admin_base.html' %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <!-- Header and Welcome Message -->
+    <div class="header mb-4">
+        <h1 class="text-primary">Admin Dashboard</h1>
+        <h4 class="text-secondary">Welcome, {{ username }}!</h4>
+    </div>
+
+    <!-- Row 1: System Overview / Statistics -->
+    <div class="row mb-4">
+        <div class="col-lg-4">
+            <div class="card text-white bg-info shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Connected Devices</h5>
+                    <p class="card-text">{{ connected_devices }} Devices</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card text-white bg-success shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Active Users</h5>
+                    <p class="card-text">{{ active_users }} Users</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card text-white bg-warning shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Energy Consumption</h5>
+                    <p class="card-text">{{ energy_consumption }} kWh</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Row 2: System Health Summary -->
+    <div class="row mb-4">
+        <div class="col-lg-4">
+            <div class="card text-white bg-danger shadow">
+                <div class="card-body">
+                    <h5 class="card-title">System Temperature</h5>
+                    <p class="card-text">{{ system_temperature }}°C</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card text-white bg-primary shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Network Status</h5>
+                    <p class="card-text">{{ network_status }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card text-white bg-secondary shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Battery Usage</h5>
+                    <p class="card-text">{{ battery_usage }}%</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Row 3: Quick Access Panels -->
+    <div class="row mb-4">
+        <div class="col-lg-3">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Real-Time Monitoring</h5>
+                    <a href="{{ url_for('admin.monitoring') }}" class="btn btn-primary btn-sm">Go</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Alerts & Notifications</h5>
+                    <a href="{{ url_for('admin.notifications') }}" class="btn btn-primary btn-sm">View</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Device Management</h5>
+                    <a href="{{ url_for('admin.device_management') }}" class="btn btn-primary btn-sm">Manage</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="card-title">User Logs</h5>
+                    <a href="{{ url_for('admin.logs') }}" class="btn btn-primary btn-sm">View</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Row 4: Additional Tools and Features -->
+    <div class="row mb-4">
+        <div class="col-lg-3">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Reports</h5>
+                    <a href="{{ url_for('admin.reports') }}" class="btn btn-primary btn-sm">Generate</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Settings</h5>
+                    <a href="{{ url_for('admin.settings') }}" class="btn btn-primary btn-sm">Configure</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Admin Profile</h5>
+                    <a href="{{ url_for('admin.profile') }}" class="btn btn-primary btn-sm">Edit</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Privacy & Terms</h5>
+                    <a href="{{ url_for('admin.privacy') }}" class="btn btn-primary btn-sm">View</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Row 5: Charts and Analytics -->
+    <div class="row mb-4">
+        <div class="col-lg-12">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Charts and Analytics</h5>
+                    <canvas id="analyticsChart" style="height: 300px;"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Row 6: Recent Activity -->
+    <div class="row mb-4">
+        <div class="col-lg-12">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Recent Activity</h5>
+                    <ul>
+                        <li>Latest Login: {{ latest_login }}</li>
+                        <li>Recently Added Devices: {{ recent_devices }}</li>
+                        <li>System Alerts: {{ system_alerts }}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Example JavaScript for rendering a chart
+    const ctx = document.getElementById('analyticsChart').getContext('2d');
+    const analyticsChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+            datasets: [{
+                label: 'Energy Consumption',
+                data: [12, 19, 3, 5, 2, 3, 9],
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}

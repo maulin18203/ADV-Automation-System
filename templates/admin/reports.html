@@ -1,0 +1,74 @@
+{% extends 'admin/admin_base.html' %}
+{% block title %}System Reports{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>System Reports</h1>
+    
+    <!-- Report Generation Form -->
+    <div class="row mb-5">
+        <div class="col-lg-12">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Generate Reports</h5>
+                    <form method="POST">
+                        <div class="mb-3">
+                            <label class="form-label">Report Type</label>
+                            <select class="form-control" name="report_type">
+                                <option value="usage">Usage Report</option>
+                                <option value="activity">Activity Report</option>
+                                <option value="system">System Report</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Date Range</label>
+                            <input type="date" class="form-control" name="start_date">
+                            <input type="date" class="form-control mt-2" name="end_date">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Generate Report</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Us Data Section -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Contact Us Submissions</h5>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Message</th>
+                                <th>Timestamp</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if contacts %}
+                                {% for contact in contacts %}
+                                    <tr>
+                                        <td>{{ contact.id }}</td>
+                                        <td>{{ contact.username }}</td>
+                                        <td>{{ contact.email }}</td>
+                                        <td>{{ contact.message }}</td>
+                                        <td>{{ contact.timestamp }}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="5" class="text-center">No contact submissions found.</td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

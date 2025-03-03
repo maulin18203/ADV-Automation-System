@@ -1,0 +1,39 @@
+{% extends 'admin/admin_base.html' %}
+{% block title %}Search Results{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Search Results</h1>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Results for: {{ query }}</h5>
+                    <!-- Add search results content here -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{# Extra block to display template mapping information #}
+{% block extra %}
+    {% set template_mapping = {
+        'home': 'home.html',
+        'aboutus': 'aboutus.html',
+        'services': 'services.html',
+        'signup': 'signup.html',
+        'error': 'error.html',
+        'non_existent_template': 'non_existent_template.html'
+    } %}
+    <div class="container mt-4">
+        <h2>Template Mapping Information</h2>
+        {% if template is not defined %}
+            <p>The template variable is not defined.</p>
+        {% else %}
+            {% set selected_template = template_mapping[template] if template in template_mapping else template_mapping['non_existent_template'] %}
+            <p>Selected Template: <strong>{{ selected_template }}</strong></p>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -1,0 +1,113 @@
+/* General Body Styling */
+body {
+    background-image: 
+    linear-gradient(to bottom right, rgba(65, 108, 111, 1), #d4af37);    
+    font-family: 'Arial', sans-serif;
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 100vh;
+}
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 250px;
+    background-color: #343a40;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.sidebar img {
+    margin-bottom: 20px;
+    max-width: 150px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.sidebar .nav-link {
+    color: white;
+}
+
+.sidebar .nav-link:hover {
+    background-color: #575757;
+}
+
+.content {
+    margin-left: 250px;
+    padding: 20px;
+}
+
+.dropdown-menu {
+    background-color: #343a40;
+}
+
+.search-bar-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+}
+
+/* Positioning user profile to the top-right */
+.user-profile-container {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-top: 10px;
+    margin-right: 20px;
+}
+
+/* Styling the admin profile dropdown */
+
+/* Add this CSS to your user.css or within a <style> block */
+
+.device-card {
+    margin: 20px 0;
+    padding: 15px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    background-color: #f8f9fa;
+}
+
+.device-card h2 {
+    margin-bottom: 10px;
+}
+
+.device-card h3 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+.switch-button {
+    margin: 5px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+}
+
+.switch-on {
+    background-color: #28a745;
+    color: white;
+}
+
+.switch-off {
+    background-color: #dc3545;
+    color: white;
+}
+
+.status {
+    font-weight: bold;
+    font-size: 1.3rem;
+}
+
+.status-green {
+    color: green;
+}
+
+.status-red {
+    color: red;
+}

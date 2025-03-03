@@ -1,0 +1,127 @@
+{% extends 'admin/admin_base.html' %}
+{% block title %}System Settings{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>System Settings</h1>
+    <form method="POST" action="{{ url_for('admin.settings') }}" enctype="multipart/form-data">
+        <div class="row">
+            <!-- General Settings -->
+            <div class="col-lg-12">
+                <div class="card shadow mb-4">
+                    <div class="card-header">
+                        <h5 class="card-title">General Settings</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label">System Name</label>
+                            <input type="text" class="form-control" name="system_name" value="{{ settings.system_name or '' }}">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Notification Settings</label>
+                            <select class="form-control" name="notification_level">
+                                <option value="all" {% if settings.notification_level == 'all' %}selected{% endif %}>All Notifications</option>
+                                <option value="important" {% if settings.notification_level == 'important' %}selected{% endif %}>Important Only</option>
+                                <option value="none" {% if settings.notification_level == 'none' %}selected{% endif %}>None</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Appearance Settings -->
+            <div class="col-lg-12">
+                <div class="card shadow mb-4">
+                    <div class="card-header">
+                        <h5 class="card-title">Appearance Settings</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label">Theme</label>
+                            <select class="form-control" name="theme">
+                                <option value="light" {% if settings.theme == 'light' %}selected{% endif %}>Light</option>
+                                <option value="dark" {% if settings.theme == 'dark' %}selected{% endif %}>Dark</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Font Size</label>
+                            <input type="number" class="form-control" name="font_size" value="{{ settings.font_size or 14 }}" min="10" max="24">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Security Settings -->
+            <div class="col-lg-12">
+                <div class="card shadow mb-4">
+                    <div class="card-header">
+                        <h5 class="card-title">Security Settings</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" name="maintenance_mode" id="maintenanceMode" {% if settings.maintenance_mode %}checked{% endif %}>
+                            <label class="form-check-label" for="maintenanceMode">Enable Maintenance Mode</label>
+                        </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" name="two_factor" id="twoFactor" {% if settings.two_factor %}checked{% endif %}>
+                            <label class="form-check-label" for="twoFactor">Enable Two-Factor Authentication</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Advanced Settings -->
+            <div class="col-lg-12">
+                <div class="card shadow mb-4">
+                    <div class="card-header">
+                        <h5 class="card-title">Advanced Settings</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label">API Key</label>
+                            <input type="text" class="form-control" name="api_key" value="{{ settings.api_key or '' }}">
+                        </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" name="enable_logging" id="enableLogging" {% if settings.enable_logging %}checked{% endif %}>
+                            <label class="form-check-label" for="enableLogging">Enable Detailed Logging</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Backup & Restore -->
+            <div class="col-lg-12">
+                <div class="card shadow mb-4">
+                    <div class="card-header">
+                        <h5 class="card-title">Backup & Restore</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label">Upload Backup File</label>
+                            <input type="file" class="form-control" name="backup_file">
+                        </div>
+                        <button type="button" class="btn btn-secondary mb-3" id="restoreBackupBtn">Restore Backup</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Submit Button -->
+            <div class="col-lg-12">
+                <button type="submit" class="btn btn-primary">Save Settings</button>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Optionally add JavaScript for handling backup restoration confirmation
+document.getElementById('restoreBackupBtn').addEventListener('click', function() {
+    if (confirm("Are you sure you want to restore the backup? This may override current settings.")) {
+        // Trigger backup restoration logic here, e.g., submit a form or call an AJAX endpoint.
+        alert("Backup restoration process initiated.");
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,434 @@
+{% extends 'admin/admin_base.html' %}
+{% block title %}User Management{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h2>User Management</h2>
+
+    <!-- Enhanced Filter Controls -->
+    <div class="control-panel mb-4">
+        <div class="row align-items-center">
+            <div class="col-md-3 mb-3 mb-md-0">
+                <button class="btn btn-primary w-100" onclick="showAddModal()">
+                    <i class="fas fa-plus"></i> Add New User/Admin
+                </button>
+            </div>
+            <div class="col-md-9">
+                <div class="d-flex flex-wrap gap-3 justify-content-end">
+                    <select class="form-select w-auto" id="filterRole" onchange="filterTable()">
+                        <option value="">All Accounts</option>
+                        <option value="user">Regular Users</option>
+                        <option value="admin">Administrators</option>
+                    </select>
+                    <select class="form-select w-auto" id="filterStatus" onchange="filterTable()">
+                        <option value="">All Status</option>
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                    <div class="search-box position-relative">
+                        <input type="text" class="form-control" id="searchInput" placeholder="Search accounts..." onkeyup="debounceSearch()">
+                        <button class="btn btn-link position-absolute top-50 end-0 translate-middle-y" onclick="clearSearch()">×</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced Table Structure -->
+    <div class="table-container">
+        <ul class="nav nav-tabs mb-4" id="userTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="users-tab" data-bs-toggle="tab" data-bs-target="#users" type="button">
+                    Users
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="admins-tab" data-bs-toggle="tab" data-bs-target="#admins" type="button">
+                    Administrators
+                </button>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="userTabContent">
+            <!-- Users Table -->
+            <div class="tab-pane fade show active" id="users">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Username</th>
+                                        <th>Full Name</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="usersTableBody">
+                                    {% for user in users %}
+                                    <tr data-id="{{ user.id }}" data-role="user">
+                                        <td>{{ user.id }}</td>
+                                        <td>{{ user.username }}</td>
+                                        <td>{{ user.full_name }}</td>
+                                        <td>{{ user.email }}</td>
+                                        <td>{{ user.phone or 'N/A' }}</td>
+                                        <td>
+                                            <a href="{{ url_for('admin.view_user', id=user.id) }}" class="btn btn-sm btn-info">View</a>
+                                            <a href="{{ url_for('admin.edit_user', id=user.id) }}" class="btn btn-sm btn-warning">Edit</a>
+                                            <a href="{{ url_for('admin.delete_user', id=user.id) }}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this user?');">Delete</a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Admins Table -->
+            <div class="tab-pane fade" id="admins">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Username</th>
+                                        <th>Full Name</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="adminsTableBody">
+                                    {% for admin in admins %}
+                                    <tr data-id="{{ admin.id }}" data-role="admin">
+                                        <td>{{ admin.id }}</td>
+                                        <td>{{ admin.username }}</td>
+                                        <td>{{ admin.full_name }}</td>
+                                        <td>{{ admin.email }}</td>
+                                        <td>{{ admin.phone or 'N/A' }}</td>
+                                        <td>
+                                            <a href="{{ url_for('admin.view_admin', id=admin.id) }}" class="btn btn-sm btn-info">View</a>
+                                            <a href="{{ url_for('admin.delete_admin', id=admin.id) }}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this admin?');">Delete</a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="d-flex justify-content-between align-items-center mt-3">
+        <div class="page-info">
+            Showing <span id="currentRange">1-{{ users|length }}</span> of <span id="totalItems">{{ users|length }}</span> items
+        </div>
+        <div class="pagination-controls">
+            <button class="btn btn-outline-secondary" onclick="changePage('prev')" id="prevBtn">Previous</button>
+            <span class="mx-3" id="pageInfo">Page 1 of 1</span>
+            <button class="btn btn-outline-secondary" onclick="changePage('next')" id="nextBtn">Next</button>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="modalOverlay" class="modal-overlay"></div>
+
+    <!-- View Modal -->
+    <div id="viewModal" class="floating-modal">
+        <h3 class="modal-title">Account Details</h3>
+        <div class="user-details">
+            <!-- Account details will be dynamically populated -->
+        </div>
+        <div class="text-end mt-4">
+            <button class="btn btn-secondary" onclick="closeModal('view')">Close</button>
+        </div>
+    </div>
+
+    <!-- Add/Edit User Modal -->
+    <div class="modal fade" id="userModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitle">Add New Account</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="userForm" onsubmit="handleUserSubmit(event)">
+                        <input type="hidden" id="userId" name="user_id">
+                        <!-- Role selection: allows adding both user and admin -->
+                        <div class="mb-3">
+                            <label class="form-label">Role</label>
+                            <select class="form-select" id="userRole" name="role">
+                                <option value="user" selected>User</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username" name="username" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="full_name" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="full_name" name="full_name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Phone</label>
+                            <input type="tel" class="form-control" id="phone" name="phone" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" name="password">
+                            <small class="text-muted" id="passwordHelp">Leave blank to keep existing password when editing</small>
+                        </div>
+                        <div class="mb-3">
+                            <label for="confirm_password" class="form-label">Confirm Password</label>
+                            <input type="password" class="form-control" id="confirm_password" name="confirm_password">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary" id="submitBtn">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Global variables
+    let currentPage = 1;
+    const itemsPerPage = 5;
+    let filteredData = [];
+    let currentModalType = null;
+    let isEditing = false;
+    let currentUserId = null;
+    let currentSort = { column: 0, ascending: true };
+    let debounceTimer;
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        loadAllData();
+        setupEventListeners();
+    });
+
+    // Setup event listeners for filters and modals
+    function setupEventListeners() {
+        document.getElementById('searchInput').addEventListener('input', debounceSearch);
+        document.getElementById('filterRole').addEventListener('change', filterTable);
+        document.getElementById('filterStatus').addEventListener('change', filterTable);
+        document.getElementById('modalOverlay').addEventListener('click', closeCurrentModal);
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') closeCurrentModal();
+        });
+    }
+
+    // Load user and admin data via AJAX
+    function loadAllData() {
+        fetch('/user_management/get_all_users')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    populateUsersTable(data.data.users);
+                    populateAdminsTable(data.data.admins);
+                } else {
+                    showToast('error', data.message || 'Failed to load data');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast('error', 'Failed to load data');
+            });
+    }
+
+    // Populate Users Table
+    function populateUsersTable(users) {
+        const tbody = document.getElementById('usersTableBody');
+        tbody.innerHTML = '';
+        users.forEach(user => {
+            const row = document.createElement('tr');
+            row.setAttribute('data-id', user.id);
+            row.setAttribute('data-role', 'user');
+            row.innerHTML = `
+                <td>${user.id}</td>
+                <td>${user.username}</td>
+                <td>${user.full_name}</td>
+                <td>${user.email}</td>
+                <td>${user.phone || 'N/A'}</td>
+                <td>
+                    <a href="/user_management/view_user/${user.id}" class="btn btn-sm btn-info">View</a>
+                    <a href="/user_management/edit_user/${user.id}" class="btn btn-sm btn-warning">Edit</a>
+                    <a href="/user_management/delete_user/${user.id}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this user?');">Delete</a>
+                </td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+
+    // Populate Admins Table (Edit button omitted for admins)
+    function populateAdminsTable(admins) {
+        const tbody = document.getElementById('adminsTableBody');
+        tbody.innerHTML = '';
+        admins.forEach(admin => {
+            const row = document.createElement('tr');
+            row.setAttribute('data-id', admin.id);
+            row.setAttribute('data-role', 'admin');
+            row.innerHTML = `
+                <td>${admin.id}</td>
+                <td>${admin.username}</td>
+                <td>${admin.full_name}</td>
+                <td>${admin.email}</td>
+                <td>${admin.phone || 'N/A'}</td>
+                <td>
+                    <a href="/user_management/view_admin/${admin.id}" class="btn btn-sm btn-info">View</a>
+                    <a href="/user_management/delete_admin/${admin.id}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this admin?');">Delete</a>
+                </td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+
+    // Debounce function for search input
+    function debounceSearch() {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(filterTable, 300);
+    }
+
+    // Filter table function (implement as needed)
+    function filterTable() {
+        // You can implement filtering logic here based on search input and filters
+    }
+
+    // Pagination functions (placeholders)
+    function changePage(direction) {
+        alert("Pagination not implemented in this demo.");
+    }
+
+    // Close modal functions
+    function closeCurrentModal() {
+        document.getElementById('modalOverlay').style.display = 'none';
+        // Hide modals (if using custom modals)
+    }
+
+    // Toast notifications (simple alert for now)
+    function showToast(type, message) {
+        alert(message);
+    }
+
+    // Show Add User Modal for both user and admin creation
+    function showAddModal() {
+        isEditing = false;
+        currentUserId = null;
+        document.getElementById('userForm').reset();
+        document.getElementById('modalTitle').textContent = 'Add New Account';
+        document.getElementById('submitBtn').textContent = 'Add Account';
+        document.getElementById('password').required = true;
+        document.getElementById('confirm_password').required = true;
+        document.getElementById('passwordHelp').style.display = 'none';
+        const modal = new bootstrap.Modal(document.getElementById('userModal'));
+        modal.show();
+    }
+
+    // Show Edit User Modal (only for users, not admins)
+    function showEditModal(userId) {
+        isEditing = true;
+        currentUserId = userId;
+        // Only allow editing if the account is a user; if admin, do nothing.
+        const row = document.querySelector(`tr[data-id="${userId}"]`);
+        const role = row.getAttribute('data-role');
+        if (role !== 'user') {
+            showToast('error', 'Editing admin accounts is not allowed.');
+            return;
+        }
+        document.getElementById('modalTitle').textContent = 'Edit User';
+        document.getElementById('submitBtn').textContent = 'Save Changes';
+        document.getElementById('userId').value = userId;
+        document.getElementById('userRole').value = role;
+        document.getElementById('password').required = false;
+        document.getElementById('confirm_password').required = false;
+        document.getElementById('passwordHelp').style.display = 'block';
+
+        fetch(`/user_management/get_user/${userId}?role=${role}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('username').value = data.user.username;
+                    document.getElementById('full_name').value = data.user.full_name;
+                    document.getElementById('email').value = data.user.email;
+                    document.getElementById('phone').value = data.user.phone;
+                    const modal = new bootstrap.Modal(document.getElementById('userModal'));
+                    modal.show();
+                } else {
+                    showToast('error', data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast('error', 'Failed to fetch user data');
+            });
+    }
+
+    // Form submission for add/edit
+    function handleUserSubmit(event) {
+        event.preventDefault();
+        if (!validateForm()) return;
+
+        const formData = new FormData(document.getElementById('userForm'));
+        const url = isEditing ? '/user_management/edit_user' : '/user_management/add_user';
+        fetch(url, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const modal = bootstrap.Modal.getInstance(document.getElementById('userModal'));
+                modal.hide();
+                showToast('success', data.message);
+                setTimeout(() => location.reload(), 1000);
+            } else {
+                showToast('error', data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showToast('error', 'An error occurred while saving');
+        });
+    }
+
+    // Form validation
+    function validateForm() {
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirm_password').value;
+        if ((password || confirmPassword) && password !== confirmPassword) {
+            showToast('error', 'Passwords do not match');
+            return false;
+        }
+        const email = document.getElementById('email').value;
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            showToast('error', 'Please enter a valid email address');
+            return false;
+        }
+        const phone = document.getElementById('phone').value;
+        if (!/^\d{10}$/.test(phone)) {
+            showToast('error', 'Please enter a valid 10-digit phone number');
+            return false;
+        }
+        return true;
+    }
+</script>
+{% endblock %}

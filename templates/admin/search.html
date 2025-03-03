@@ -1,0 +1,11 @@
+{ %extend 'base.html'%}
+{% if template is not defined %} {{ template }}
+{% print(template)  %}  {{
+    'home': 'home.html',
+    'aboutus': 'aboutus.html',
+    'services': 'services.html',
+    'signup': 'signup.html',
+    'error': 'error.html',
+    'non_existent_template': 'non_existent_template.html',
+.get(template, 'non_existent_template.html')
+}}

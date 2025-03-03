@@ -1,0 +1,139 @@
+{% extends 'users/user_base.html' %}
+
+{% block title %}Main Switch Control{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center">Main Switch Control Panel</h2>
+
+    <div class="row justify-content-center">
+        <!-- Main Switch (Controls All Rooms) -->
+        <div class="col-md-6 mb-3">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h4 class="card-title">🏠 Main Switch</h4>
+                    <p>Control all rooms at once</p>
+                    <p>Status: <span id="main-status" class="fw-bold text-secondary">OFF</span></p>
+                    <button class="btn btn-success btn-lg mb-2" onclick="toggleAllDevices('on')">Turn ALL ON</button>
+                    <button class="btn btn-danger btn-lg" onclick="toggleAllDevices('off')">Turn ALL OFF</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Room Cards -->
+    <div class="row justify-content-center">
+        <!-- Main Room Control -->
+        <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Main Room</h5>
+                    <p>Status: <span id="main_room_status" class="fw-bold text-secondary">Loading...</span></p>
+                    <button class="btn btn-success mb-2" onclick="toggleDevice('main_room', 'on')">Turn On</button>
+                    <button class="btn btn-danger" onclick="toggleDevice('main_room', 'off')">Turn Off</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bedroom 1 Control -->
+        <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Bedroom 1</h5>
+                    <p>Status: <span id="bedroom1_status" class="fw-bold text-secondary">Loading...</span></p>
+                    <button class="btn btn-success mb-2" onclick="toggleDevice('bedroom1', 'on')">Turn On</button>
+                    <button class="btn btn-danger" onclick="toggleDevice('bedroom1', 'off')">Turn Off</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bedroom 2 Control -->
+        <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Bedroom 2</h5>
+                    <p>Status: <span id="bedroom2_status" class="fw-bold text-secondary">Loading...</span></p>
+                    <button class="btn btn-success mb-2" onclick="toggleDevice('bedroom2', 'on')">Turn On</button>
+                    <button class="btn btn-danger" onclick="toggleDevice('bedroom2', 'off')">Turn Off</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bedroom 3 Control -->
+        <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Bedroom 3</h5>
+                    <p>Status: <span id="bedroom3_status" class="fw-bold text-secondary">Loading...</span></p>
+                    <button class="btn btn-success mb-2" onclick="toggleDevice('bedroom3', 'on')">Turn On</button>
+                    <button class="btn btn-danger" onclick="toggleDevice('bedroom3', 'off')">Turn Off</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kitchen Control -->
+        <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Kitchen</h5>
+                    <p>Status: <span id="kitchen_status" class="fw-bold text-secondary">Loading...</span></p>
+                    <button class="btn btn-success mb-2" onclick="toggleDevice('kitchen', 'on')">Turn On</button>
+                    <button class="btn btn-danger" onclick="toggleDevice('kitchen', 'off')">Turn Off</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function updateDeviceStatus() {
+        const devices = [
+            'main_room',
+            'bedroom1',
+            'bedroom2',
+            'bedroom3',
+            'kitchen'
+        ];
+
+        devices.forEach(device => {
+            fetch(`/get-device-status/${device}`)
+                .then(response => response.json())
+                .then(data => {
+                    const statusElement = document.getElementById(device + "_status");
+                    if (data.status === "on") {
+                        statusElement.textContent = "ON";
+                        statusElement.classList.remove("text-secondary", "text-danger");
+                        statusElement.classList.add("text-success");
+                    } else {
+                        statusElement.textContent = "OFF";
+                        statusElement.classList.remove("text-secondary", "text-success");
+                        statusElement.classList.add("text-danger");
+                    }
+                })
+                .catch(error => console.error('Error fetching status:', error));
+        });
+    }
+
+    function toggleDevice(device, state) {
+        fetch(`/toggle-device/${device}/${state}`)
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                updateDeviceStatus();
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function toggleAllDevices(state) {
+        fetch(`/toggle-all-devices/${state}`)
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                updateDeviceStatus();
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    window.onload = updateDeviceStatus;
+</script>
+{% endblock %}

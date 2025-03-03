@@ -1,0 +1,246 @@
+{% extends "users/user_base.html" %} 
+{% block title %}User Dashboard{% endblock %} 
+{% block content %}
+<div class="container mt-4">
+    <!-- Welcome Message -->
+    <div class="header mb-4">
+        <h1 class="text-primary">User Dashboard</h1>
+        <h4 class="text-secondary">Welcome, {{ username }}!</h4>
+    </div>
+
+    <!-- Dashboard Details -->
+    <div class="row">
+        <!-- Welcome Section -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Welcome Section</h5>
+                    <p>User greeting and profile overview.</p>
+                    <p>Current date and time.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Real-Time Monitoring -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Real-Time Monitoring</h5>
+                    <p>Live status of connected devices (on/off).</p>
+                    <p>Current energy consumption and usage trends.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Device Controls -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Device Controls</h5>
+                    <p>Control panel for devices (e.g., lights, fans, AC, etc.).</p>
+                    <p>Grouped controls for rooms or device types.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Automation -->
+    <div class="row">
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Custom Automation</h5>
+                    <p>Set schedules for devices (e.g., turn on/off at specific times).</p>
+                    <p>Create custom rules for device behavior.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Alerts and Notifications -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Alerts and Notifications</h5>
+                    <p>Recent activity notifications.</p>
+                    <p>System warnings or error alerts.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analytics and Insights -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Analytics and Insights</h5>
+                    <p>Energy consumption graphs (daily, weekly, monthly).</p>
+                    <p>Device usage patterns and reports.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Activity Logs -->
+    <div class="row">
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">User Activity Logs</h5>
+                    <p>History of actions performed by the user.</p>
+                    <p>Device interaction history.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Account Settings -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Account Settings</h5>
+                    <p>Profile management (update name, email, password).</p>
+                    <p>Option to manage account preferences.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Connected Devices -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Connected Devices</h5>
+                    <p>List of registered devices.</p>
+                    <p>Add or remove devices.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Support and FAQs -->
+    <div class="row">
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Support and FAQs</h5>
+                    <p>Common troubleshooting guides.</p>
+                    <p>Contact support for help.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Voice Command Integration -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Voice Command Integration</h5>
+                    <p>Information on available voice commands.</p>
+                    <p>Setup guide for voice control.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Health -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">System Health</h5>
+                    <p>System uptime and performance overview.</p>
+                    <p>Diagnostic checks for devices.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notifications Center -->
+    <div class="row">
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Notifications Center</h5>
+                    <p>Important announcements or updates.</p>
+                    <p>Scheduled maintenance alerts.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feedback and Suggestions -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Feedback and Suggestions</h5>
+                    <p>Form to submit feedback or feature requests.</p>
+                    <p>Ratings for the automation system.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Security Features -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Security Features</h5>
+                    <p>Login activity log.</p>
+                    <p>Option to enable 2FA (Two-Factor Authentication).</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Logout Button -->
+    <div class="row">
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Logout Button</h5>
+                    <p>Easy logout option for user security.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleDevice(device, status) {
+        fetch('/user/toggle-device', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    device: device,
+                    status: status
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log(`${device} ${status ? 'enabled' : 'disabled'}`);
+                } else {
+                    console.error('Failed to toggle device');
+                }
+            });
+    }
+
+    function toggleAllDevices(status) {
+        const devices = ['mainRoomToggle', 'bedroom1Toggle', 'bedroom2Toggle', 'bedroom3Toggle', 'kitchenToggle'];
+        devices.forEach(deviceId => {
+            document.getElementById(deviceId).checked = status;
+            const device = deviceId.replace('Toggle', '').toLowerCase();
+            toggleDevice(device, status);
+        });
+    }
+
+    // Update device status periodically
+    function updateDeviceStatus() {
+        fetch('/user/device-status')
+            .then(response => response.json())
+            .then(data => {
+                Object.entries(data).forEach(([device, status]) => {
+                    const toggle = document.getElementById(`${device}Toggle`);
+                    if (toggle) toggle.checked = status;
+                });
+            });
+    }
+
+    // Update status every 5 seconds
+    setInterval(updateDeviceStatus, 5000);
+</script>
+{% endblock %}

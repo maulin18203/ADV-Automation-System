@@ -1,0 +1,228 @@
+/* General Body Styling */
+/*STYLES.CSS */
+body {
+    background-image: linear-gradient(to bottom right, rgba(65, 108, 111, 1), #d4af37);
+    background-size: cover; /* Cover the entire body */
+    background-position: center; /* Center the image */
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    color: rgba(65, 108, 111, 1); /* Teal text */
+    overflow: hidden;
+}
+
+/* Fullscreen Logo Loader - Display only once */
+#logo-loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(to bottom right, rgba(65, 108, 111, 1), #d4af37); /* Teal to gold */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    animation: fadeOut 1s ease-in-out 3s forwards;
+}
+
+#logo-loader.hidden {
+    display: none;
+}
+
+#logo-loader img {
+    width: 150px;
+    animation: logoZoom 3s ease-in-out;
+}
+
+@keyframes logoZoom {
+    0% {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+        visibility: hidden;
+    }
+}
+
+/* Image Styling */
+.img-fluid {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    transition: filter 0.3s ease, transform 0.3s ease;
+    filter: brightness(90%) contrast(110%);
+}
+
+.img-fluid:hover {
+    filter: brightness(110%) contrast(120%);
+    transform: scale(1.05);
+}
+
+/* Navigation Bar */
+#navigation {
+    background-color: rgba(65, 108, 111, 1); /* Teal background */
+    color: #534a4a; /* White text for contrast */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+#navigation a {
+    font-size: 1rem;
+    margin: 0 10px;
+    color: #dfdcdc; /* White links */
+}
+
+#navigation a:hover {
+    color: #d4af37; /* Gold on hover */
+}
+
+@media (max-width: 768px) {
+    #navigation {
+        padding: 8px 15px;
+    }
+    #navigation a {
+        font-size: 0.9rem;
+        margin: 0 5px;
+    }
+}
+
+/* Container */
+.container-fluid {
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: auto;
+    background-image: linear-gradient(to bottom right, rgba(65, 108, 111, 0.24), #d4af3736);
+    padding: 20px;
+}
+
+/* Card Styling */
+.card {
+    background-color: rgba(255, 255, 255, 0.205);
+    margin: 20px;
+    border-radius: 20px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 400px;
+    border-color: rgba(65, 108, 111, 0.541); /* Teal border */
+}
+
+.card-body {
+    padding: 25px;
+}
+
+h3, label {
+    color: rgba(65, 108, 111, 1); /* Teal headings */
+}
+
+/* Form Control */
+.form-control {
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 15px;
+    background-color: #ecf0f165; /* Light gray background */
+    color: rgba(65, 108, 111, 1); /* Teal text */
+    border: none;
+}
+
+/* Button Styling */
+.btn-primary {
+    background-image: linear-gradient(315deg, #d4af37 0%, rgba(65, 108, 111, 1) 74%); /* Gold to teal */
+    border: none;
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 16px;
+    width: 100%;
+    color: #fff; /* White text */
+    transition: transform 0.3s ease;
+}
+
+h1 {
+    color: rgba(65, 108, 111, 1); /* Teal headings */
+}
+
+.btn-primary:hover {
+    transform: scale(1.05);
+    background-image: linear-gradient(315deg, rgba(65, 108, 111, 1) 0%, #d4af37 74%); /* Reverse gradient on hover */
+}
+
+/* Link Styling */
+.text-decoration-none {
+    text-decoration: none;
+    color: rgba(65, 108, 111, 1); /* Teal links */
+}
+
+.text-center {
+    color: rgba(65, 108, 111, 1); /* Teal text */
+}
+
+a {
+    color: rgba(65, 108, 111, 1); /* Teal links */
+}
+
+.text-decoration-none:hover {
+    text-decoration: underline;
+    color: #d4af37; /* Gold on hover */
+}
+
+/* Footer Styling */
+footer {
+    background-color: black; /* Teal background for contrast */
+    padding: 20px;
+    text-align: center;
+    color: #ffffff; /* White text for contrast */
+}
+
+/* Logo Animation */
+.logo {
+    animation: logoAnimation 2s ease-in-out;
+    max-width: 180px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 576px) {
+    .container-fluid {
+        padding: 10px;
+    }
+    .logo {
+        max-width: 150px;
+    }
+}
+
+/* Error Message */
+.alert-danger {
+    background-color: #e74c3c; /* Red background for error messages */
+    color: #fff; /* White text */
+    border-radius: 10px;
+    padding: 10px;
+}
+
+/* Custom Font Styling */
+#font {
+    color: #ffffff; /* White text for font */
+}
+
+.m1 {
+    background-image: linear-gradient(to right, rgba(65, 108, 111, 1), #d4af37); /* Teal to gold */
+}

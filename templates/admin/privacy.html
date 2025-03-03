@@ -1,0 +1,55 @@
+{% extends 'admin/admin_base.html' %}
+{% block title %}Privacy & Terms{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Privacy Policy & Terms of Service</h1>
+    
+    <!-- Privacy Policy Section -->
+    <div class="card shadow mb-4">
+        <div class="card-header">
+            <h5>Privacy Policy</h5>
+        </div>
+        <div class="card-body">
+            <p>Welcome to our Privacy Policy page. Your privacy is critically important to us. This document outlines the types of personal information we collect and how it is used.</p>
+            <h6>Information Collection</h6>
+            <p>We may collect various types of information, including your name, email address, and usage data. This information is used to improve our services and provide you with a better experience.</p>
+            <h6>Use of Information</h6>
+            <p>The information we collect is used to operate, maintain, and improve our service. We may also use your data for analytics, research, and marketing purposes in accordance with applicable laws.</p>
+            <h6>Data Security</h6>
+            <p>We implement a variety of security measures to safeguard your personal information. However, no method of transmission over the Internet is completely secure, so we cannot guarantee its absolute security.</p>
+            <h6>Third-Party Sharing</h6>
+            <p>We do not sell your personal information to third parties. Data may be shared with trusted partners only when necessary and under strict confidentiality agreements.</p>
+            <p>Please contact us if you have any questions regarding our Privacy Policy.</p>
+        </div>
+    </div>
+
+    <!-- Terms of Service Section -->
+    <div class="card shadow mb-4">
+        <div class="card-header">
+            <h5>Terms of Service</h5>
+        </div>
+        <div class="card-body">
+            <p>By using our service, you agree to the following terms and conditions. Please read these Terms of Service carefully.</p>
+            <h6>Acceptance of Terms</h6>
+            <p>By accessing or using our service, you agree to be bound by these terms. If you do not agree with any part of these terms, you must not use our service.</p>
+            <h6>Usage Guidelines</h6>
+            <p>You agree to use our service only for lawful purposes and in a manner that does not infringe on the rights of others.</p>
+            <h6>Limitation of Liability</h6>
+            <p>Our service is provided on an "as is" basis without warranties of any kind, either express or implied. We are not liable for any damages arising from your use of our service.</p>
+            <h6>Changes to the Terms</h6>
+            <p>We reserve the right to modify these terms at any time. Continued use of the service constitutes acceptance of the updated terms, so please review them periodically.</p>
+        </div>
+    </div>
+
+    <!-- Contact Section -->
+    <div class="card shadow mb-4">
+        <div class="card-header">
+            <h5>Contact Us</h5>
+        </div>
+        <div class="card-body">
+            <p>If you have any questions or concerns regarding our Privacy Policy or Terms of Service, please <a href="{{ url_for('home.contact_us') }}">contact us</a>.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
